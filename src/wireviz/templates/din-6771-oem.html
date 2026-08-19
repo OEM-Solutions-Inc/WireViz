@@ -49,64 +49,86 @@
       height: 400mm;
     }
 
+    /* ===== Diagram area – flex layout so product images never overlap ===== */
     #diagram {
       position: relative;
       top: 0;
       left: 0;
-      max-width: 100%;
+      width: 100%;
       height: calc(100% - 13 * 4.25mm);
-      text-align: center;
-      vertical-align: middle;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
     }
 
-    #diagram > svg,
-    #diagram > img {
+    #description {
+      flex: 0 0 auto;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 1mm;
+    }
+
+    #main-diagram {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 0;          /* critical for flex children */
+    }
+
+    #main-diagram svg,
+    #main-diagram img {
       max-width: 95%;
       max-height: 100%;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
+      /* no transform – flex does the centering */
     }
 
-    /* ========== Assembled product images ========== */
+    #notes {
+      flex: 0 0 auto;
+      width: 100%;
+      text-align: center;
+      margin-top: 1mm;
+    }
+
+    /* ===== Product images – always below the main diagram ===== */
     #product_images {
+      flex: 0 0 auto;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: flex-start;
-      gap: 5mm 8mm;
-      margin: 3mm 0 1mm 0;
+      gap: 4mm 7mm;
+      margin: 2mm 0 0 0;
       width: 100%;
+      max-height: 58mm;       /* keeps them from eating too much vertical space */
     }
 
     .product-image {
       display: inline-block;
-      max-width: 85mm;
+      max-width: 80mm;
       text-align: center;
       vertical-align: top;
     }
 
     .product-image img {
       max-width: 100%;
-      max-height: 50mm;
+      max-height: 48mm;
       height: auto;
       border: 0.25mm solid #555;
       object-fit: contain;
-      /* kill the centering transform that the main diagram rule applies */
-      position: static !important;
-      top: auto !important;
-      transform: none !important;
     }
 
     .product-image .caption {
       font-size: 2.3mm;
-      margin-top: 1.2mm;
+      margin-top: 1mm;
       line-height: 1.2;
       white-space: normal;
-      max-width: 85mm;
+      max-width: 80mm;
     }
 
-    /* Hide any slot that has no real image (empty src or leftover placeholder) */
+    /* Hide empty / leftover-placeholder slots */
     .product-image img[src=""],
     .product-image img[src^="<!--"] {
       display: none !important;
@@ -116,7 +138,7 @@
       display: none !important;
     }
 
-    /* ========== Title block / BOM (unchanged) ========== */
+    /* ===== Title block + BOM (unchanged) ===== */
     #titleblock {
       position: absolute;
       bottom: 0mm;
@@ -152,19 +174,14 @@
       text-align: left;
     }
 
-    #bom .bom_col_id {
-      text-align: center;
-    }
+    #bom .bom_col_id { text-align: center; }
+    #bom .bom_col_qty { text-align: right; }
 
-    #bom .bom_col_qty {
-      text-align: right;
-    }
-
-    .name { width: 16mm; }
-    .date { width: 10mm; }
-    .revno { text-align: center; width: 6mm; }
+    .name      { width: 16mm; }
+    .date      { width: 10mm; }
+    .revno     { text-align: center; width: 6mm; }
     .changelog { width: 22mm; }
-    .process { width: 18mm; }
+    .process   { width: 18mm; }
     .title {
       width: 82mm;
       font-size: 5.6mm;
@@ -207,7 +224,9 @@
           <!-- %description% -->
         </div>
 
-        <!-- %diagram% -->
+        <div id="main-diagram">
+          <!-- %diagram% -->
+        </div>
 
         <div id="notes">
           <!-- %notes% -->
