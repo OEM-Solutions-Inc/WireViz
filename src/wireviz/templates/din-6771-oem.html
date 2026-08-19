@@ -12,7 +12,7 @@
     }
 
     table, td, th, #frame {
-      border: 0.35mm solid black; /* line weight based on DIN 15 */
+      border: 0.35mm solid black;
     }
 
     table {
@@ -25,30 +25,26 @@
     td, th {
       border-top: 0;
       border-left: 0;
-
       overflow: hidden;
-      /* display: inline-block; */
       white-space: nowrap;
       font-size: 2.8mm;
     }
-
-    /* Canvas size based on DIN 823 / DIN 6771 / EN ISO 5457 */
 
     #frame {
       position: relative;
     }
 
-    .A4, .sheetsize_default { /* portrait */
+    .A4, .sheetsize_default {
       width: 180mm;
       height: 277mm;
     }
 
-    .A3 { /* landscape */
+    .A3 {
       width: 390mm;
       height: 277mm;
     }
 
-    .A2 { /* landscape */
+    .A2 {
       width: 564mm;
       height: 400mm;
     }
@@ -59,13 +55,12 @@
       left: 0;
       max-width: 100%;
       height: calc(100% - 13 * 4.25mm);
-      /* TODO: auto-adapt to height of title block + BOM table;
-               BOM table might be above (A4) or to the left (A3 and larger) of the title block */
       text-align: center;
       vertical-align: middle;
     }
 
-    #diagram svg, #diagram img {
+    #diagram > svg,
+    #diagram > img {
       max-width: 95%;
       max-height: 100%;
       position: relative;
@@ -73,49 +68,55 @@
       transform: translateY(-50%);
     }
 
-    /* ---------- Assembled product images ---------- */
+    /* ========== Assembled product images ========== */
     #product_images {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 4mm 6mm;
-      margin-top: 4mm;
-      margin-bottom: 2mm;
-      text-align: center;
+      align-items: flex-start;
+      gap: 5mm 8mm;
+      margin: 3mm 0 1mm 0;
+      width: 100%;
     }
 
     .product-image {
       display: inline-block;
-      max-width: 80mm;          /* keeps them reasonable on A4 */
+      max-width: 85mm;
+      text-align: center;
       vertical-align: top;
     }
 
     .product-image img {
       max-width: 100%;
-      max-height: 55mm;
+      max-height: 50mm;
       height: auto;
-      border: 0.25mm solid #666;
+      border: 0.25mm solid #555;
       object-fit: contain;
-      /* override the centering transform from the main diagram rule */
-      position: static;
-      top: auto;
-      transform: none;
+      /* kill the centering transform that the main diagram rule applies */
+      position: static !important;
+      top: auto !important;
+      transform: none !important;
     }
 
     .product-image .caption {
-      font-size: 2.4mm;
-      margin-top: 1.5mm;
+      font-size: 2.3mm;
+      margin-top: 1.2mm;
+      line-height: 1.2;
       white-space: normal;
-      line-height: 1.25;
-      max-width: 80mm;
+      max-width: 85mm;
     }
 
-    /* hide completely empty slots (when src is missing) */
-    .product-image:empty,
-    .product-image img[src=""] {
-      display: none;
+    /* Hide any slot that has no real image (empty src or leftover placeholder) */
+    .product-image img[src=""],
+    .product-image img[src^="<!--"] {
+      display: none !important;
+    }
+    .product-image:has(img[src=""]),
+    .product-image:has(img[src^="<!--"]) {
+      display: none !important;
     }
 
+    /* ========== Title block / BOM (unchanged) ========== */
     #titleblock {
       position: absolute;
       bottom: 0mm;
@@ -131,20 +132,20 @@
       height: 4.25mm;
     }
 
-    .A4 #bom { /* BOM on top of title block */
+    .A4 #bom {
       position: absolute;
       bottom: 38.25mm;
       right: 0;
     }
 
-    .A3 #bom, .A2 #bom { /* BOM to the left of title block */
+    .A3 #bom, .A2 #bom {
       position: absolute;
       bottom: 0mm;
       left: 0mm;
     }
 
     #bom table {
-      width:180mm;
+      width: 180mm;
     }
 
     #bom th, td {
@@ -159,65 +160,41 @@
       text-align: right;
     }
 
-    .name {
-      width: 16mm;
-    }
-
-    .date {
-      width: 10mm;
-    }
-
-    .revno {
-      text-align: center;
-      width: 6mm;
-    }
-
-    .changelog {
-      width: 22mm;
-    }
-
-    .process {
-      width: 18mm;
-    }
-
+    .name { width: 16mm; }
+    .date { width: 10mm; }
+    .revno { text-align: center; width: 6mm; }
+    .changelog { width: 22mm; }
+    .process { width: 18mm; }
     .title {
       width: 82mm;
       font-size: 5.6mm;
       text-align: center;
       white-space: normal;
     }
-
     .company {
       font-size: 4mm;
       text-align: center;
       white-space: normal;
     }
-
     .partno {
       font-size: 4mm;
       text-align: center;
       white-space: normal;
     }
-
     .sheetno {
       width: 12.75mm;
       text-align: center;
     }
-
   </style>
   <style type="text/css" media="print">
-
     @page {
       size: auto;
       margin: 0;
     }
-
-    /* TODO: auto-adjust based on portrait (larger margin on left) or landscape (larger margin on top) */
     #page {
       margin: 10mm;
       margin-left: 20mm;
     }
-
   </style>
 </head>
 <body>
@@ -236,26 +213,26 @@
           <!-- %notes% -->
         </div>
 
-        <!-- ===== Assembled product images (iterable via metadata.product_images) ===== -->
+        <!-- ===== Assembled product images ===== -->
         <div id="product_images">
 
           <div class="product-image">
-            <img src="<!-- %product_images_1_src% -->" alt="<!-- %product_images_1_caption% -->">
+            <img src="<!-- %product_images_1_src% -->" alt="">
             <div class="caption"><!-- %product_images_1_caption% --></div>
           </div>
 
           <div class="product-image">
-            <img src="<!-- %product_images_2_src% -->" alt="<!-- %product_images_2_caption% -->">
+            <img src="<!-- %product_images_2_src% -->" alt="">
             <div class="caption"><!-- %product_images_2_caption% --></div>
           </div>
 
           <div class="product-image">
-            <img src="<!-- %product_images_3_src% -->" alt="<!-- %product_images_3_caption% -->">
+            <img src="<!-- %product_images_3_src% -->" alt="">
             <div class="caption"><!-- %product_images_3_caption% --></div>
           </div>
 
           <div class="product-image">
-            <img src="<!-- %product_images_4_src% -->" alt="<!-- %product_images_4_caption% -->">
+            <img src="<!-- %product_images_4_src% -->" alt="">
             <div class="caption"><!-- %product_images_4_caption% --></div>
           </div>
 
@@ -347,9 +324,9 @@
             <td colspan="2"></td>
           </tr>
         </table>
-      </div> <!-- /titleblock -->
+      </div>
 
-    </div> <!-- /frame -->
-  </div> <!-- /page -->
+    </div>
+  </div>
 </body>
 </html>
