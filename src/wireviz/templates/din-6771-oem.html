@@ -49,7 +49,7 @@
       height: 400mm;
     }
 
-    /* ===== Diagram area – flex layout so product images never overlap ===== */
+    /* ===== Diagram area ===== */
     #diagram {
       position: relative;
       top: 0;
@@ -62,27 +62,19 @@
       overflow: hidden;
     }
 
-    #description {
-      flex: 0 0 auto;
-      width: 100%;
-      text-align: center;
-      margin-bottom: 1mm;
-    }
-
     #main-diagram {
       flex: 1 1 auto;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      min-height: 0;          /* critical for flex children */
+      min-height: 0;
     }
 
     #main-diagram svg,
     #main-diagram img {
       max-width: 95%;
       max-height: 100%;
-      /* no transform – flex does the centering */
     }
 
     #notes {
@@ -92,7 +84,7 @@
       margin-top: 1mm;
     }
 
-    /* ===== Product images – always below the main diagram ===== */
+    /* ===== Product images ===== */
     #product_images {
       flex: 0 0 auto;
       display: flex;
@@ -102,7 +94,7 @@
       gap: 4mm 7mm;
       margin: 2mm 0 0 0;
       width: 100%;
-      max-height: 58mm;       /* keeps them from eating too much vertical space */
+      max-height: 58mm;
     }
 
     .product-image {
@@ -128,7 +120,6 @@
       max-width: 80mm;
     }
 
-    /* Hide empty / leftover-placeholder slots */
     .product-image img[src=""],
     .product-image img[src^="<!--"] {
       display: none !important;
@@ -138,7 +129,31 @@
       display: none !important;
     }
 
-    /* ===== Title block + BOM (unchanged) ===== */
+    /* ===== Description block (moved next to title block) ===== */
+    #description-block {
+      position: absolute;
+      right: 0;
+      width: 180mm;
+      font-size: 2.7mm;
+      line-height: 1.25;
+      white-space: normal;
+      text-align: left;
+      padding: 1.5mm 2mm;
+      box-sizing: border-box;
+    }
+
+    /* Position just above the title block */
+    .A3 #description-block,
+    .A2 #description-block {
+      bottom: 39.5mm;          /* title block is 38.25 mm tall */
+    }
+
+    .A4 #description-block,
+    .sheetsize_default #description-block {
+      bottom: 77.5mm;          /* above BOM + title block on A4 */
+    }
+
+    /* ===== Title block + BOM ===== */
     #titleblock {
       position: absolute;
       bottom: 0mm;
@@ -220,10 +235,6 @@
 
       <div id="diagram">
 
-        <div id="description">
-          <!-- %description% -->
-        </div>
-
         <div id="main-diagram">
           <!-- %diagram% -->
         </div>
@@ -258,6 +269,11 @@
         </div>
         <!-- ===== end product images ===== -->
 
+      </div>
+
+      <!-- Description moved here, next to the title block -->
+      <div id="description-block">
+        <!-- %description% -->
       </div>
 
       <div id="bom">
