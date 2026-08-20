@@ -1,369 +1,417 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="generator" content="<!-- %generator% -->">
-  <title><!-- %title% --></title>
-  <style>
-    body {
-      font-family: <!-- %fontname% -->;
-      background-color: <!-- %bgcolor% -->;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="<!-- %generator% -->" />
+    <title><!-- %title% --></title>
+    <style>
+      body {
+        font-family: <!-- %fontname% -->;
+        background-color: <!-- %bgcolor% -->;
+      }
 
-    table, td, th, #frame {
-      border: 0.35mm solid black;
-    }
+      table,
+      td,
+      th,
+      #frame {
+        border: 0.35mm solid black;
+      }
 
-    table {
-      padding: 0;
-      border-bottom: 0;
-      border-right: 0;
-      border-spacing: 0mm;
-    }
+      table {
+        padding: 0;
+        border-bottom: 0;
+        border-right: 0;
+        border-spacing: 0mm;
+      }
 
-    td, th {
-      border-top: 0;
-      border-left: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      font-size: 2.8mm;
-    }
+      td,
+      th {
+        border-top: 0;
+        border-left: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 2.8mm;
+      }
 
-    #frame {
-      position: relative;
-    }
+      #frame {
+        position: relative;
+      }
 
-    .A4, .sheetsize_default {
-      width: 180mm;
-      height: 277mm;
-    }
+      .A4,
+      .sheetsize_default {
+        width: 180mm;
+        height: 277mm;
+      }
 
-    .A3 {
-      width: 390mm;
-      height: 277mm;
-    }
+      .A3 {
+        width: 390mm;
+        height: 277mm;
+      }
 
-    .A2 {
-      width: 564mm;
-      height: 400mm;
-    }
+      .A2 {
+        width: 564mm;
+        height: 400mm;
+      }
 
-    /* ===== Diagram area ===== */
-    #diagram {
-      position: relative;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: calc(100% - 13 * 4.25mm);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
-    }
+      /* ===== Diagram area ===== */
+      #diagram {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 13 * 4.25mm);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+      }
 
-    #main-diagram {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      min-height: 0;
-    }
+      /* Important: do NOT grow – size to the SVG content */
+      #main-diagram {
+        flex: 0 1 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 0;
+      }
 
-    #main-diagram svg,
-    #main-diagram img {
-      max-width: 95%;
-      max-height: 100%;
-    }
+      #main-diagram svg,
+      #main-diagram img {
+        max-width: 95%;
+        max-height: 100%;
+      }
 
-    #notes {
-      flex: 0 0 auto;
-      width: 100%;
-      text-align: center;
-      margin-top: 1mm;
-    }
+      #notes {
+        flex: 0 0 auto;
+        width: 100%;
+        text-align: center;
+        margin-top: 1mm;
+      }
 
-    /* ===== Product images ===== */
-    #product_images {
-      flex: 0 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 4mm 7mm;
-      margin: 2mm 0 0 0;
-      width: 100%;
-      max-height: 58mm;
-    }
+      /* ===== Product images (framed table style) ===== */
+      #product_images {
+        flex: 0 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 4mm 7mm;
+        margin: 3mm 0 0 0;
+        width: 100%;
+      }
 
-    .product-image {
-      display: inline-block;
-      max-width: 80mm;
-      text-align: center;
-      vertical-align: top;
-    }
+      .product-image {
+        display: inline-block;
+        max-width: 90mm;
+        text-align: center;
+        vertical-align: top;
+        border: 0.35mm solid black;
+        background-color: white;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
 
-    .product-image img {
-      max-width: 100%;
-      max-height: 48mm;
-      height: auto;
-      border: 0.25mm solid #555;
-      object-fit: contain;
-    }
+      .product-image img {
+        display: block;
+        max-width: 100%;
+        max-height: 48mm; /* default – overridden by inline style */
+        height: auto;
+        margin: 0 auto;
+        border: none;
+        object-fit: contain;
+      }
 
-    .product-image .caption {
-      font-size: 2.3mm;
-      margin-top: 1mm;
-      line-height: 1.2;
-      white-space: normal;
-      max-width: 80mm;
-    }
+      .product-image .caption {
+        font-size: 2.4mm;
+        line-height: 1.25;
+        white-space: normal;
+        padding: 1.2mm 2.5mm;
+        border-top: 0.35mm solid black;
+        background-color: white;
+        text-align: center;
+      }
 
-    .product-image img[src=""],
-    .product-image img[src^="<!--"] {
-      display: none !important;
-    }
-    .product-image:has(img[src=""]),
-    .product-image:has(img[src^="<!--"]) {
-      display: none !important;
-    }
+      /* Hide empty / leftover-placeholder slots */
+      .product-image img[src=""],
+      .product-image img[src^="<!--"] {
+        display: none !important;
+      }
+      .product-image:has(img[src=""]),
+      .product-image:has(img[src^="<!--"]) {
+        display: none !important;
+      }
 
-    /* ===== Description block (moved next to title block) ===== */
-    #description-block {
-      position: absolute;
-      right: 0;
-      width: 180mm;
-      font-size: 2.7mm;
-      line-height: 1.25;
-      white-space: normal;
-      text-align: left;
-      padding: 1.5mm 2.5mm;
-      box-sizing: border-box;
-      border: 0.35mm solid black;   /* matches the rest of the drawing */
-      background-color: white;     /* keeps it clean over any background */
-    }
+      /* ===== Description block (boxed, above title block) ===== */
+      #description-block {
+        position: absolute;
+        right: 0;
+        width: 180mm;
+        font-size: 2.7mm;
+        line-height: 1.25;
+        white-space: normal;
+        text-align: left;
+        padding: 1.5mm 2.5mm;
+        box-sizing: border-box;
+        border: 0.35mm solid black;
+        background-color: white;
+      }
 
-    /* Position just above the title block */
-    .A3 #description-block,
-    .A2 #description-block {
-      bottom: 39.5mm;          /* title block is 38.25 mm tall */
-    }
+      .A3 #description-block,
+      .A2 #description-block {
+        bottom: 38.25mm;
+      }
 
-    .A4 #description-block,
-    .sheetsize_default #description-block {
-      bottom: 77.5mm;          /* above BOM + title block on A4 */
-    }
+      .A4 #description-block,
+      .sheetsize_default #description-block {
+        bottom: 77.5mm;
+      }
 
-    /* ===== Title block + BOM ===== */
-    #titleblock {
-      position: absolute;
-      bottom: 0mm;
-      right: -0mm;
-    }
+      /* ===== Title block + BOM ===== */
+      #titleblock {
+        position: absolute;
+        bottom: 0mm;
+        right: -0mm;
+      }
 
-    #titleblock table {
-      width: 180mm;
-      height: 38.25mm;
-    }
+      #titleblock table {
+        width: 180mm;
+        height: 38.25mm;
+      }
 
-    #titleblock tr, #bom tr {
-      height: 4.25mm;
-    }
+      #titleblock tr,
+      #bom tr {
+        height: 4.25mm;
+      }
 
-    .A4 #bom {
-      position: absolute;
-      bottom: 38.25mm;
-      right: 0;
-    }
+      .A4 #bom {
+        position: absolute;
+        bottom: 38.25mm;
+        right: 0;
+      }
 
-    .A3 #bom, .A2 #bom {
-      position: absolute;
-      bottom: 0mm;
-      left: 0mm;
-    }
+      .A3 #bom,
+      .A2 #bom {
+        position: absolute;
+        bottom: 0mm;
+        left: 0mm;
+      }
 
-    #bom table {
-      width: 180mm;
-    }
+      #bom table {
+        width: 180mm;
+      }
 
-    #bom th, td {
-      text-align: left;
-    }
+      #bom th,
+      td {
+        text-align: left;
+      }
 
-    #bom .bom_col_id { text-align: center; }
-    #bom .bom_col_qty { text-align: right; }
+      #bom .bom_col_id {
+        text-align: center;
+      }
+      #bom .bom_col_qty {
+        text-align: right;
+      }
 
-    .name      { width: 16mm; }
-    .date      { width: 10mm; }
-    .revno     { text-align: center; width: 6mm; }
-    .changelog { width: 22mm; }
-    .process   { width: 18mm; }
-    .title {
-      width: 82mm;
-      font-size: 5.6mm;
-      text-align: center;
-      white-space: normal;
-    }
-    .company {
-      font-size: 4mm;
-      text-align: center;
-      white-space: normal;
-    }
-    .partno {
-      font-size: 4mm;
-      text-align: center;
-      white-space: normal;
-    }
-    .sheetno {
-      width: 12.75mm;
-      text-align: center;
-    }
-  </style>
-  <style type="text/css" media="print">
-    @page {
-      size: auto;
-      margin: 0;
-    }
-    #page {
-      margin: 10mm;
-      margin-left: 20mm;
-    }
-  </style>
-</head>
-<body>
-  <div id="page">
-    <div id="frame" class="<!-- %template_sheetsize% -->">
+      .name {
+        width: 16mm;
+      }
+      .date {
+        width: 10mm;
+      }
+      .revno {
+        text-align: center;
+        width: 6mm;
+      }
+      .changelog {
+        width: 22mm;
+      }
+      .process {
+        width: 18mm;
+      }
+      .title {
+        width: 82mm;
+        font-size: 5.6mm;
+        text-align: center;
+        white-space: normal;
+      }
+      .company {
+        font-size: 4mm;
+        text-align: center;
+        white-space: normal;
+      }
+      .partno {
+        font-size: 4mm;
+        text-align: center;
+        white-space: normal;
+      }
+      .sheetno {
+        width: 12.75mm;
+        text-align: center;
+      }
+    </style>
+    <style type="text/css" media="print">
+      @page {
+        size: auto;
+        margin: 0;
+      }
+      #page {
+        margin: 10mm;
+        margin-left: 20mm;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page">
+      <div id="frame" class="<!-- %template_sheetsize% -->">
+        <div id="diagram">
+          <div id="main-diagram">
+            <!-- %diagram% -->
+          </div>
 
-      <div id="diagram">
+          <div id="notes">
+            <!-- %notes% -->
+          </div>
 
-        <div id="main-diagram">
-          <!-- %diagram% -->
+          <!-- ===== Assembled product images ===== -->
+          <div id="product_images">
+            <div class="product-image">
+              <img
+                src="<!-- %product_images_1_src% -->"
+                style="max-height: <!-- %product_images_1_height% -->mm"
+                alt=""
+              />
+              <div class="caption"><!-- %product_images_1_caption% --></div>
+            </div>
+
+            <div class="product-image">
+              <img
+                src="<!-- %product_images_2_src% -->"
+                style="max-height: <!-- %product_images_2_height% -->mm"
+                alt=""
+              />
+              <div class="caption"><!-- %product_images_2_caption% --></div>
+            </div>
+
+            <div class="product-image">
+              <img
+                src="<!-- %product_images_3_src% -->"
+                style="max-height: <!-- %product_images_3_height% -->mm"
+                alt=""
+              />
+              <div class="caption"><!-- %product_images_3_caption% --></div>
+            </div>
+
+            <div class="product-image">
+              <img
+                src="<!-- %product_images_4_src% -->"
+                style="max-height: <!-- %product_images_4_height% -->mm"
+                alt=""
+              />
+              <div class="caption"><!-- %product_images_4_caption% --></div>
+            </div>
+          </div>
+          <!-- ===== end product images ===== -->
         </div>
 
-        <div id="notes">
-          <!-- %notes% -->
+        <!-- Description block -->
+        <div id="description-block">
+          <!-- %description% -->
         </div>
 
-        <!-- ===== Assembled product images ===== -->
-        <div id="product_images">
-
-          <div class="product-image">
-            <img src="<!-- %product_images_1_src% -->" alt="">
-            <div class="caption"><!-- %product_images_1_caption% --></div>
-          </div>
-
-          <div class="product-image">
-            <img src="<!-- %product_images_2_src% -->" alt="">
-            <div class="caption"><!-- %product_images_2_caption% --></div>
-          </div>
-
-          <div class="product-image">
-            <img src="<!-- %product_images_3_src% -->" alt="">
-            <div class="caption"><!-- %product_images_3_caption% --></div>
-          </div>
-
-          <div class="product-image">
-            <img src="<!-- %product_images_4_src% -->" alt="">
-            <div class="caption"><!-- %product_images_4_caption% --></div>
-          </div>
-
+        <div id="bom">
+          <!-- %bom_reversed% -->
         </div>
-        <!-- ===== end product images ===== -->
 
+        <div id="titleblock">
+          <table>
+            <tr>
+              <td class="revno"><!-- %revisions_8% --></td>
+              <td class="changelog"><!-- %revisions_8_changelog% --></td>
+              <td class="date"><!-- %revisions_8_date% --></td>
+              <td class="name"><!-- %revisions_8_name% --></td>
+              <td class="process"></td>
+              <td class="date">Date</td>
+              <td class="name">Name</td>
+              <td class="title" colspan="3" rowspan="5"><!-- %title% --></td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_7% --></td>
+              <td><!-- %revisions_7_changelog% --></td>
+              <td><!-- %revisions_7_date% --></td>
+              <td><!-- %revisions_7_name% --></td>
+              <td><!-- %authors_1% --></td>
+              <td><!-- %authors_1_date% --></td>
+              <td><!-- %authors_1_name% --></td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_6% --></td>
+              <td><!-- %revisions_6_changelog% --></td>
+              <td><!-- %revisions_6_date% --></td>
+              <td><!-- %revisions_6_name% --></td>
+              <td><!-- %authors_2% --></td>
+              <td><!-- %authors_2_date% --></td>
+              <td><!-- %authors_2_name% --></td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_5% --></td>
+              <td><!-- %revisions_5_changelog% --></td>
+              <td><!-- %revisions_5_date% --></td>
+              <td><!-- %revisions_5_name% --></td>
+              <td><!-- %authors_3% --></td>
+              <td><!-- %authors_3_date% --></td>
+              <td><!-- %authors_3_name% --></td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_4% --></td>
+              <td><!-- %revisions_4_changelog% --></td>
+              <td><!-- %revisions_4_date% --></td>
+              <td><!-- %revisions_4_name% --></td>
+              <td colspan="2"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_3% --></td>
+              <td><!-- %revisions_3_changelog% --></td>
+              <td><!-- %revisions_3_date% --></td>
+              <td><!-- %revisions_3_name% --></td>
+              <td class="company" colspan="3" rowspan="3">
+                <!-- %company% -->
+              </td>
+              <td class="partno" colspan="2" rowspan="3"><!-- %pn% --></td>
+              <td class="sheetno" rowspan="2">
+                Sheet<br /><!-- %sheet_current% -->
+              </td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_2% --></td>
+              <td><!-- %revisions_2_changelog% --></td>
+              <td><!-- %revisions_2_date% --></td>
+              <td><!-- %revisions_2_name% --></td>
+            </tr>
+            <tr>
+              <td class="revno"><!-- %revisions_1% --></td>
+              <td><!-- %revisions_1_changelog% --></td>
+              <td><!-- %revisions_1_date% --></td>
+              <td><!-- %revisions_1_name% --></td>
+              <td class="sheetno">
+                of
+                <!-- %sheet_total% -->
+              </td>
+            </tr>
+            <tr>
+              <td>Rev</td>
+              <td>Changelog</td>
+              <td>Date</td>
+              <td>Name</td>
+              <td colspan="3"></td>
+              <td></td>
+              <td colspan="2"></td>
+            </tr>
+          </table>
+        </div>
       </div>
-
-      <!-- Description moved here, next to the title block -->
-      <div id="description-block">
-        <!-- %description% -->
-      </div>
-
-      <div id="bom">
-        <!-- %bom_reversed% -->
-      </div>
-
-      <div id="titleblock">
-        <table>
-          <tr>
-            <td class="revno"><!-- %revisions_8% --></td>
-            <td class="changelog"><!-- %revisions_8_changelog% --></td>
-            <td class="date"><!-- %revisions_8_date% --></td>
-            <td class="name"><!-- %revisions_8_name% --></td>
-            <td class="process"></td>
-            <td class="date">Date</td>
-            <td class="name">Name</td>
-            <td class="title" colspan="3" rowspan="5"><!-- %title% --></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_7% --></td>
-            <td><!-- %revisions_7_changelog% --></td>
-            <td><!-- %revisions_7_date% --></td>
-            <td><!-- %revisions_7_name% --></td>
-            <td><!-- %authors_1% --></td>
-            <td><!-- %authors_1_date% --></td>
-            <td><!-- %authors_1_name% --></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_6% --></td>
-            <td><!-- %revisions_6_changelog% --></td>
-            <td><!-- %revisions_6_date% --></td>
-            <td><!-- %revisions_6_name% --></td>
-            <td><!-- %authors_2% --></td>
-            <td><!-- %authors_2_date% --></td>
-            <td><!-- %authors_2_name% --></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_5% --></td>
-            <td><!-- %revisions_5_changelog% --></td>
-            <td><!-- %revisions_5_date% --></td>
-            <td><!-- %revisions_5_name% --></td>
-            <td><!-- %authors_3% --></td>
-            <td><!-- %authors_3_date% --></td>
-            <td><!-- %authors_3_name% --></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_4% --></td>
-            <td><!-- %revisions_4_changelog% --></td>
-            <td><!-- %revisions_4_date% --></td>
-            <td><!-- %revisions_4_name% --></td>
-            <td colspan="2"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_3% --></td>
-            <td><!-- %revisions_3_changelog% --></td>
-            <td><!-- %revisions_3_date% --></td>
-            <td><!-- %revisions_3_name% --></td>
-            <td class="company" colspan="3" rowspan="3"><!-- %company% --></td>
-            <td class="partno" colspan="2" rowspan="3"><!-- %pn% --></td>
-            <td class="sheetno" rowspan="2">Sheet<br /><!-- %sheet_current% --></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_2% --></td>
-            <td><!-- %revisions_2_changelog% --></td>
-            <td><!-- %revisions_2_date% --></td>
-            <td><!-- %revisions_2_name% --></td>
-          </tr>
-          <tr>
-            <td class="revno"><!-- %revisions_1% --></td>
-            <td><!-- %revisions_1_changelog% --></td>
-            <td><!-- %revisions_1_date% --></td>
-            <td><!-- %revisions_1_name% --></td>
-            <td class="sheetno">of <!-- %sheet_total% --></td>
-          </tr>
-          <tr>
-            <td>Rev</td>
-            <td>Changelog</td>
-            <td>Date</td>
-            <td>Name</td>
-            <td colspan="3"></td>
-            <td></td>
-            <td colspan="2"></td>
-          </tr>
-        </table>
-      </div>
-
     </div>
-  </div>
-</body>
+  </body>
 </html>
